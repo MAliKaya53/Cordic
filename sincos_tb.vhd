@@ -9,8 +9,8 @@ end sincos_tb;
 architecture Behavioral of sincos_tb is
 
 constant CLOCK_PERIOD : time 			    := 10 ns;
-constant PI_POS	      : signed(15 downto 0) := "0110010010001000";
-constant PI_NEG	      : signed(15 downto 0) := "1001101101111000";
+constant PI_POS	      : signed(15 downto 0) := "0110010010001000"; -- 16-bit signed fixed-point karşılıkları
+constant PI_NEG	      : signed(15 downto 0) := "1001101101111000"; -- -- -3.14159 (yaklaşık -π)
 constant PHASE_INC    : integer		        := 256;
 					  
 signal 	 clk		  : std_logic 		    := '0';
@@ -59,9 +59,9 @@ process (clk) begin
 	else
 		phase_tvalid <= '1';
 		if (phase + PHASE_INC < PI_POS) then
-			phase <= phase + PHASE_INC;
+			phase <= phase + PHASE_INC; -- Fazı sürekli PHASE_INC kadar artırıyoruz → sanki açıyı 0’dan π’ye kadar döndürüyoruz.
 		else
-			phase <= PI_NEG;
+			phase <= PI_NEG; -- Eğer faz +π sınırını aşarsa, tekrar -π'den başlatıyoruz.
 		end if;
 	end if;
 end process;
